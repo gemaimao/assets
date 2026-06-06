@@ -3,19 +3,21 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-    <title>Nature Breath - Cesium 3D</title>
+    <title>Cesium 3D Player</title>
     <!-- 引入 CesiumJS 库 -->
     <script src="https://cesium.com/downloads/cesiumjs/releases/1.107/Build/Cesium/Cesium.js"></script>
     <link href="https://cesium.com/downloads/cesiumjs/releases/1.107/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    
+    <!-- 引入罗盘控制盘插件 -->
+    <script src="https://unpkg.com/cesium-navigation-es6@3.0.3/dist/CesiumNavigation.umd.js"></script>
+    
     <style>
         html, body, #cesiumContainer {
             width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
             background-color: #000;
         }
-        /* 隐藏底部默认的版权信息，让界面更干净（商用需按官方协议保留） */
         .cesium-widget-credits { display: none !important; }
         
-        /* 自定义一个左上角的悬浮面板面板 */
         #custom-panel {
             position: absolute;
             top: 20px;
@@ -27,7 +29,7 @@
             padding: 20px;
             border-radius: 12px;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            pointer-events: none; /* 让鼠标穿透这个面板操作地图 */
+            pointer-events: none;
             z-index: 10;
         }
         #custom-panel h1 { margin: 0 0 10px 0; font-size: 20px; font-weight: 300; letter-spacing: 2px; }
@@ -37,79 +39,127 @@
 <body>
     <div id="cesiumContainer"></div>
     <div id="custom-panel">
-        <h1>自然之息</h1>
-        <p>纯代码版 3D 沉浸式引擎预览</p>
+        <h1 id="project-title">加载中...</h1>
+        <p>基于数据驱动的 3D 沉浸式引擎</p>
     </div>
 
     <script>
-        // 【关键步骤 1】填入你的 Cesium ion Access Token
-        // 如果这里不填，地球也能出来，但会带有默认的水印并可能限制地形精度
+        // 尝试从刚才配好的文件中读取 Token
+        // 注意：为了自动化，以后你应该把 Token 配置在 JSON 里
         Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhZDY0YWY3Yy1mZmQ1LTQ2MjgtYTRjZi01OTM0NzQ3YjljOGMiLCJpZCI6NDM2NzA2LCJpc3MiOiJodHRwczovL2FwaS5jZXNpdW0uY29tIiwiYXVkIjoidW5kZWZpbmVkX2RlZmF1bHQiLCJpYXQiOjE3Nzk4MDU4MjZ9.80efk41binldWGgit3mGqqZ3keritykzZUoNw0qoQc0';
 
-        // 【关键步骤 2】初始化 3D 引擎，关闭那些平时用不到的各种繁琐按钮
         const viewer = new Cesium.Viewer('cesiumContainer', {
-            terrain: Cesium.Terrain.fromWorldTerrain(), // 开启全球 3D 高程地形
-            animation: false,       // 隐藏左下角动画控件
-            timeline: false,        // 隐藏底部时间轴控件
-            baseLayerPicker: false, // 隐藏底图选择器
-            fullscreenButton: false,// 隐藏全屏按钮
-            geocoder: false,        // 隐藏搜索框
-            homeButton: false,      // 隐藏 Home 按钮
-            infoBox: true,          // 保留点击后弹出的右侧信息框（气泡窗）
-            sceneModePicker: false, // 隐藏 3D/2D 模式切换
-            selectionIndicator: false, // 隐藏选中绿框
-            navigationHelpButton: false // 隐藏帮助按钮
+            terrain: Cesium.Terrain.fromWorldTerrain(), 
+            animation: false,       
+            timeline: false,        
+            baseLayerPicker: false, 
+            fullscreenButton: false,
+            geocoder: false,        
+            homeButton: false,      
+            infoBox: true,          
+            sceneModePicker: false, 
+            selectionIndicator: false, 
+            navigationHelpButton: false 
         });
 
-        // 优化：消除抗锯齿并提升画质
         viewer.scene.postProcessStages.fxaa.enabled = true;
-        
-        // 【关键步骤 3】用代码添加一个极具质感的自定义 POI 点（以则拉岗为例）
-        const zelagangPosition = Cesium.Cartesian3.fromDegrees(94.453298, 29.432851, 3000); // 经度, 纬度, 海拔高度
 
-        const customPoint = viewer.entities.add({
-            name: "则拉岗 (Zelagang)",
-            position: zelagangPosition,
-            // 1. 我们不用默认的图片，放一个发光的圆点作为地标
-            point: {
-                pixelSize: 15,
-                color: Cesium.Color.fromCssColorString('#e11d48'),
-                outlineColor: Cesium.Color.WHITE,
-                outlineWidth: 2,
-                heightReference: Cesium.HeightReference.CLAMP_TO_GROUND // 自动紧贴地形表面！不悬空！
-            },
-            // 2. 悬浮的纯文本标签
-            label: {
-                text: "则拉岗交汇处",
-                font: '14pt monospace',
-                style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-                outlineWidth: 2,
-                verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-                pixelOffset: new Cesium.Cartesian2(0, -20), // 往上挪一点，不要挡住点
-                heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
-            },
-            // 3. 点击后弹出的气泡内容 (支持复杂 HTML！)
-            description: `
-                <div style="font-family: Arial, sans-serif; padding: 10px;">
-                    <img src="https://images.unsplash.com/photo-1544883618-9710c9d924db?auto=format&fit=crop&w=300&q=80" style="width:100%; border-radius:8px; margin-bottom: 10px;">
-                    <h3 style="color: #0ea5e9; margin-top: 0;">尼洋河与雅鲁藏布江的交汇</h3>
-                    <p style="color: #ccc; line-height: 1.5;">这里是我们自定义的 <b>HTML 气泡</b>，它比 Stories 编辑器里的要灵活一百倍。你可以在这里嵌入视频、添加超链接，甚至写入交互按钮。</p>
-                </div>
-            `
-        });
+        // 初始化 3D 罗盘和导航仪
+        try {
+            const options = {
+                defaultResetView: Cesium.Cartographic.fromDegrees(90, 30, 2000000), // 默认回到的位置
+                enableCompass: true,
+                enableZoomControls: true,
+                enableDistanceLegend: true,
+                enableCompassOuterRing: true
+            };
+            new CesiumNavigation(viewer, options);
+        } catch(e) {
+            console.warn("罗盘插件加载失败:", e);
+        }
 
-        // 【关键步骤 4】设计一个极其惊艳的“电影级开场飞行”
-        // 网页一加载完，镜头不生硬地跳跃，而是像航拍机一样缓缓飞向目标点
-        viewer.camera.flyTo({
-            destination: Cesium.Cartesian3.fromDegrees(94.453298, 29.35, 8000), // 相机挂在山头南边，8000米高空
-            orientation: {
-                heading: Cesium.Math.toRadians(0),   // 正北方向看
-                pitch: Cesium.Math.toRadians(-20),   // 往下俯视 20度，看到远处的群山和河谷
-                roll: 0.0
-            },
-            duration: 6, // 飞行过程持续 6 秒，非常顺滑
-            easingFunction: Cesium.EasingFunction.QUADRATIC_IN_OUT // 电影级缓动特效：开头慢，中间快，结尾慢
-        });
+        // ==========================================
+        // 核心：基于 cesium_config.json 的数据驱动渲染
+        // ==========================================
+        fetch('./cesium_config.json')
+            .then(res => res.json())
+            .then(config => {
+                // 1. 更新标题
+                if (config.project_name) {
+                    document.getElementById('project-title').innerText = config.project_name;
+                }
+
+                // 2. 加载 POI 点位
+                if (config.pois && config.pois.length > 0) {
+                    config.pois.forEach(poi => {
+                        const position = Cesium.Cartesian3.fromDegrees(poi.lon, poi.lat, poi.alt || 0);
+                        viewer.entities.add({
+                            name: poi.name,
+                            position: position,
+                            point: {
+                                pixelSize: 12,
+                                color: Cesium.Color.fromCssColorString('#0ea5e9'),
+                                outlineColor: Cesium.Color.WHITE,
+                                outlineWidth: 2,
+                                heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+                            },
+                            label: {
+                                text: poi.name,
+                                font: '12pt sans-serif',
+                                style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                                outlineWidth: 2,
+                                verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                                pixelOffset: new Cesium.Cartesian2(0, -15),
+                                heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+                            },
+                            description: poi.html_content || ''
+                        });
+                    });
+                }
+
+                // 3. 加载路线 (如果存在)
+                if (config.routes && config.routes.length > 0) {
+                    config.routes.forEach(route => {
+                        // 将 [[lon, lat], ...] 转换为平铺数组 [lon, lat, lon, lat]
+                        let flatCoords = [];
+                        route.coordinates.forEach(c => {
+                            flatCoords.push(c[0]);
+                            flatCoords.push(c[1]);
+                        });
+                        viewer.entities.add({
+                            name: route.name || "路线",
+                            polyline: {
+                                positions: Cesium.Cartesian3.fromDegreesArray(flatCoords),
+                                width: 5,
+                                material: Cesium.Color.fromCssColorString('#e11d48').withAlpha(0.8),
+                                clampToGround: true // 紧贴地形
+                            }
+                        });
+                    });
+                }
+
+                // 4. 执行开场飞行
+                if (config.cameraStart) {
+                    viewer.camera.flyTo({
+                        destination: Cesium.Cartesian3.fromDegrees(
+                            config.cameraStart.lon, 
+                            config.cameraStart.lat, 
+                            config.cameraStart.alt || 10000
+                        ),
+                        orientation: {
+                            heading: Cesium.Math.toRadians(config.cameraStart.heading || 0),
+                            pitch: Cesium.Math.toRadians(config.cameraStart.pitch || -45),
+                            roll: 0.0
+                        },
+                        duration: 5,
+                        easingFunction: Cesium.EasingFunction.QUADRATIC_IN_OUT
+                    });
+                }
+            })
+            .catch(e => {
+                console.error("加载配置文件失败或不存在:", e);
+                document.getElementById('project-title').innerText = "暂无配置数据";
+            });
 
     </script>
 </body>
