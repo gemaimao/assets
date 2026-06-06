@@ -25,7 +25,7 @@
       "type": "line",
       "source": {
         "type": "geojson",
-        "data": "https://raw.githubusercontent.com/longhulin/your-repo/main/niyang_river.geojson"
+        "data": "./niyang_river.geojson"
       },
       "paint": {
         "line-color": "#0d9488",
