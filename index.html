@@ -80,6 +80,7 @@
                 });
                 map.addControl(draw, 'top-left');
 
+                
                 // 3. 地图加载完成后，注入我们配置的图层
                 map.on('load', () => {
                     document.getElementById('loading').style.display = 'none';
@@ -93,22 +94,58 @@
                     });
                     map.setTerrain({ source: 'terrain-source', exaggeration: 1.5 });
 
-                    // 检查是否限制地图范围
-                    if (config.preferences && config.preferences.map && config.preferences.map.maxBounds) {
-                        map.setMaxBounds(config.preferences.map.maxBounds);
-                    }
-
                     // 动态添加图层配置
                     if (config.layers && Array.isArray(config.layers)) {
                         config.layers.forEach(layer => {
-                            // 使用 try-catch 防止某个坏掉的图层导致全图崩溃
-                            try {
-                                map.addLayer(layer);
-                            } catch (e) {
-                                console.error(`图层 ${layer.id} 加载失败:`, e);
-                            }
+                            try { map.addLayer(layer); } 
+                            catch (e) { console.error(e); }
                         });
                     }
+
+                    // --- 新增：自动定位到数据范围 ---
+                    fetch('./niyang_river.geojson')
+                        .then(res => res.json())
+                        .then(geojsonData => {
+                            if (geojsonData.features && geojsonData.features.length > 0) {
+                                let bounds = new maplibregl.LngLatBounds();
+                                geojsonData.features.forEach(f => {
+                                    if (f.geometry.type === 'Point') {
+                                        bounds.extend(f.geometry.coordinates);
+                                    } else if (f.geometry.type === 'LineString') {
+                                        f.geometry.coordinates.forEach(c => bounds.extend(c));
+                                    }
+                                });
+                                if (!bounds.isEmpty()) {
+                                    map.fitBounds(bounds, { padding: 50, duration: 2000, maxZoom: 14 });
+                                }
+                            }
+                        }).catch(e => console.warn("无法计算数据边界", e));
+
+                    // --- 新增：点击弹出气泡窗 (Popup) ---
+                    // 假设你在 tibet.json 里配置的点图层叫 niyang-points-layer
+                    map.on('click', 'niyang-points-layer', (e) => {
+                        const coordinates = e.features[0].geometry.coordinates.slice();
+                        const props = e.features[0].properties;
+                        
+                        // 组装气泡内容 (支持 HTML)
+                        let htmlContent = `<h3>${props.name || '未命名'}</h3>`;
+                        if (props.description) {
+                            htmlContent += `<div>${props.description}</div>`;
+                        }
+
+                        new maplibregl.Popup()
+                            .setLngLat(coordinates)
+                            .setHTML(htmlContent)
+                            .addTo(map);
+                    });
+
+                    // 鼠标滑过点时变成小手
+                    map.on('mouseenter', 'niyang-points-layer', () => {
+                        map.getCanvas().style.cursor = 'pointer';
+                    });
+                    map.on('mouseleave', 'niyang-points-layer', () => {
+                        map.getCanvas().style.cursor = '';
+                    });
                 });
 
                 // 统一的错误处理
