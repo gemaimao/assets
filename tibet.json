@@ -1,0 +1,75 @@
+{
+  "version": "0.1.0",
+  "name": "西藏尼洋河历史地理解析 (Tibet Map Project)",
+  "mapView": {
+    "center": [
+      92.23906518508079,
+      29.08738320612193
+    ],
+    "zoom": 11.2,
+    "bearing": 0,
+    "pitch": 0,
+    "bbox": [
+      92.10238978054736,
+      28.98650869426101,
+      92.37574058961286,
+      29.188147227793397
+    ]
+  },
+  "basemapStyleUrl": "https://tiles.openfreemap.org/styles/liberty",
+  "basemapVisible": true,
+  "basemapOpacity": 1,
+  "layers": [
+    {
+      "id": "niyang-river-layer",
+      "type": "line",
+      "source": {
+        "type": "geojson",
+        "data": "https://raw.githubusercontent.com/longhulin/your-repo/main/niyang_river.geojson"
+      },
+      "paint": {
+        "line-color": "#0d9488",
+        "line-width": 4
+      }
+    }
+  ],
+  "styles": {},
+  "preferences": {
+    "map": {
+      "restrictBounds": false,
+      "bounds": [
+        -180,
+        -85,
+        180,
+        85
+      ],
+      "minZoom": 0,
+      "maxZoom": 24,
+      "maxPitch": 85,
+      "renderWorldCopies": true
+    },
+    "environmentVariables": []
+  },
+  "plugins": {
+    "activePluginIds": [
+      "maplibre-layer-control",
+      "maplibre-gl-geoagent"
+    ],
+    "mapControlPositions": {
+      "maplibre-layer-control": "top-right",
+      "maplibre-gl-basemap-control": "top-left",
+      "maplibre-gl-esri-wayback": "top-left",
+      "maplibre-gl-geoagent": "top-left",
+      "maplibre-gl-geo-editor": "top-left",
+      "maplibre-gl-lidar": "top-left",
+      "maplibre-gl-streetview": "top-right",
+      "maplibre-gl-swipe": "top-left",
+      "maplibre-gl-components": "top-right"
+    },
+    "settings": {}
+  },
+  "metadata": {
+    "author": "Longhulin",
+    "description": "尼洋河河口则拉岗的历史地理解析"
+  }
+}
