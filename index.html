@@ -50,6 +50,15 @@
                 map.on('load', () => {
                     document.getElementById('loading').style.display = 'none';
 
+                    // 开启 3D 地形 (使用开源的 AWS 免费地形数据)
+                    map.addSource('terrain-source', {
+                        type: 'raster-dem',
+                        tiles: ['https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'],
+                        encoding: 'terrarium',
+                        tileSize: 256
+                    });
+                    map.setTerrain({ source: 'terrain-source', exaggeration: 1.5 });
+
                     // 检查是否限制地图范围
                     if (config.preferences && config.preferences.map && config.preferences.map.maxBounds) {
                         map.setMaxBounds(config.preferences.map.maxBounds);
