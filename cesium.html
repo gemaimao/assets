@@ -44,14 +44,11 @@
     <script>
         // 【关键步骤 1】填入你的 Cesium ion Access Token
         // 如果这里不填，地球也能出来，但会带有默认的水印并可能限制地形精度
-        Cesium.Ion.defaultAccessToken = '在此处替换为你的_CESIUM_ION_TOKEN';
+        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhZDY0YWY3Yy1mZmQ1LTQ2MjgtYTRjZi01OTM0NzQ3YjljOGMiLCJpZCI6NDM2NzA2LCJpc3MiOiJodHRwczovL2FwaS5jZXNpdW0uY29tIiwiYXVkIjoidW5kZWZpbmVkX2RlZmF1bHQiLCJpYXQiOjE3Nzk4MDU4MjZ9.80efk41binldWGgit3mGqqZ3keritykzZUoNw0qoQc0';
 
         // 【关键步骤 2】初始化 3D 引擎，关闭那些平时用不到的各种繁琐按钮
         const viewer = new Cesium.Viewer('cesiumContainer', {
-            terrain: Cesium.Terrain.fromWorldTerrain(), // 开启全球 3D 高程地形 // 开启全球 3D 高程地形
-            imageryProvider: new Cesium.UrlTemplateImageryProvider({
-                url: 'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
-            }), // 直接使用 Google 卫星图
+            terrain: Cesium.Terrain.fromWorldTerrain(), // 开启全球 3D 高程地形
             animation: false,       // 隐藏左下角动画控件
             timeline: false,        // 隐藏底部时间轴控件
             baseLayerPicker: false, // 隐藏底图选择器
