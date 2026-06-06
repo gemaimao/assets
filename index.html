@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>西藏尼洋河历史地理解析 (Tibet Map Project)</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <!-- 引入 MapLibre 官方样式与核心库 -->
+    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+    <style>
+        body { margin: 0; padding: 0; font-family: sans-serif; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+        #loading {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255,255,255,0.9);
+            padding: 20px; border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">正在加载地图数据...</div>
+    <div id="map"></div>
+
+    <script>
+        // 1. 获取刚刚上传的 tibet.json 配置文件
+        fetch('./tibet.json')
+            .then(response => {
+                if (!response.ok) throw new Error("无法读取配置文件");
+                return response.json();
+            })
+            .then(config => {
+                // 2. 根据 JSON 配置初始化地图
+                const map = new maplibregl.Map({
+                    container: 'map', // 容器 ID
+                    style: config.basemapStyleUrl || 'https://tiles.openfreemap.org/styles/liberty', // 底图样式
+                    center: config.mapView.center || [0, 0], // 中心点
+                    zoom: config.mapView.zoom || 2, // 缩放级别
+                    bearing: config.mapView.bearing || 0, // 方位角
+                    pitch: config.mapView.pitch || 0 // 俯仰角
+                });
+
+                // 添加导航控件（缩放、指南针）
+                map.addControl(new maplibregl.NavigationControl(), 'top-right');
+                map.addControl(new maplibregl.FullscreenControl(), 'top-right');
+
+                // 3. 地图加载完成后，注入我们配置的图层
+                map.on('load', () => {
+                    document.getElementById('loading').style.display = 'none';
+
+                    // 检查是否限制地图范围
+                    if (config.preferences && config.preferences.map && config.preferences.map.maxBounds) {
+                        map.setMaxBounds(config.preferences.map.maxBounds);
+                    }
+
+                    // 动态添加图层配置
+                    if (config.layers && Array.isArray(config.layers)) {
+                        config.layers.forEach(layer => {
+                            // 使用 try-catch 防止某个坏掉的图层导致全图崩溃
+                            try {
+                                map.addLayer(layer);
+                            } catch (e) {
+                                console.error(`图层 ${layer.id} 加载失败:`, e);
+                            }
+                        });
+                    }
+                });
+
+                // 统一的错误处理
+                map.on('error', (e) => {
+                    console.warn("地图加载过程发生警告/错误: ", e);
+                });
+            })
+            .catch(error => {
+                console.error("初始化失败:", error);
+                document.getElementById('loading').innerHTML = "⚠️ 加载地图配置文件失败，请检查 tibet.json。";
+            });
+    </script>
+</body>
+</html>
