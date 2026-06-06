@@ -48,7 +48,10 @@
 
         // 【关键步骤 2】初始化 3D 引擎，关闭那些平时用不到的各种繁琐按钮
         const viewer = new Cesium.Viewer('cesiumContainer', {
-            terrainProvider: Cesium.createWorldTerrain(), // 开启全球 3D 高程地形
+            terrain: Cesium.Terrain.fromWorldTerrain(), // 开启全球 3D 高程地形 // 开启全球 3D 高程地形
+            imageryProvider: new Cesium.UrlTemplateImageryProvider({
+                url: 'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
+            }), // 直接使用 Google 卫星图
             animation: false,       // 隐藏左下角动画控件
             timeline: false,        // 隐藏底部时间轴控件
             baseLayerPicker: false, // 隐藏底图选择器
