@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>Nature Breath - Cesium 3D</title>
+    <!-- 引入 CesiumJS 库 -->
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.107/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.107/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <style>
+        html, body, #cesiumContainer {
+            width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+            background-color: #000;
+        }
+        /* 隐藏底部默认的版权信息，让界面更干净（商用需按官方协议保留） */
+        .cesium-widget-credits { display: none !important; }
+        
+        /* 自定义一个左上角的悬浮面板面板 */
+        #custom-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            pointer-events: none; /* 让鼠标穿透这个面板操作地图 */
+            z-index: 10;
+        }
+        #custom-panel h1 { margin: 0 0 10px 0; font-size: 20px; font-weight: 300; letter-spacing: 2px; }
+        #custom-panel p { margin: 0; font-size: 13px; color: #aaa; }
+    </style>
+</head>
+<body>
+    <div id="cesiumContainer"></div>
+    <div id="custom-panel">
+        <h1>自然之息</h1>
+        <p>纯代码版 3D 沉浸式引擎预览</p>
+    </div>
+
+    <script>
+        // 【关键步骤 1】填入你的 Cesium ion Access Token
+        // 如果这里不填，地球也能出来，但会带有默认的水印并可能限制地形精度
+        Cesium.Ion.defaultAccessToken = '在此处替换为你的_CESIUM_ION_TOKEN';
+
+        // 【关键步骤 2】初始化 3D 引擎，关闭那些平时用不到的各种繁琐按钮
+        const viewer = new Cesium.Viewer('cesiumContainer', {
+            terrainProvider: Cesium.createWorldTerrain(), // 开启全球 3D 高程地形
+            animation: false,       // 隐藏左下角动画控件
+            timeline: false,        // 隐藏底部时间轴控件
+            baseLayerPicker: false, // 隐藏底图选择器
+            fullscreenButton: false,// 隐藏全屏按钮
+            geocoder: false,        // 隐藏搜索框
+            homeButton: false,      // 隐藏 Home 按钮
+            infoBox: true,          // 保留点击后弹出的右侧信息框（气泡窗）
+            sceneModePicker: false, // 隐藏 3D/2D 模式切换
+            selectionIndicator: false, // 隐藏选中绿框
+            navigationHelpButton: false // 隐藏帮助按钮
+        });
+
+        // 优化：消除抗锯齿并提升画质
+        viewer.scene.postProcessStages.fxaa.enabled = true;
+        
+        // 【关键步骤 3】用代码添加一个极具质感的自定义 POI 点（以则拉岗为例）
+        const zelagangPosition = Cesium.Cartesian3.fromDegrees(94.453298, 29.432851, 3000); // 经度, 纬度, 海拔高度
+
+        const customPoint = viewer.entities.add({
+            name: "则拉岗 (Zelagang)",
+            position: zelagangPosition,
+            // 1. 我们不用默认的图片，放一个发光的圆点作为地标
+            point: {
+                pixelSize: 15,
+                color: Cesium.Color.fromCssColorString('#e11d48'),
+                outlineColor: Cesium.Color.WHITE,
+                outlineWidth: 2,
+                heightReference: Cesium.HeightReference.CLAMP_TO_GROUND // 自动紧贴地形表面！不悬空！
+            },
+            // 2. 悬浮的纯文本标签
+            label: {
+                text: "则拉岗交汇处",
+                font: '14pt monospace',
+                style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                outlineWidth: 2,
+                verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                pixelOffset: new Cesium.Cartesian2(0, -20), // 往上挪一点，不要挡住点
+                heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+            },
+            // 3. 点击后弹出的气泡内容 (支持复杂 HTML！)
+            description: `
+                <div style="font-family: Arial, sans-serif; padding: 10px;">
+                    <img src="https://images.unsplash.com/photo-1544883618-9710c9d924db?auto=format&fit=crop&w=300&q=80" style="width:100%; border-radius:8px; margin-bottom: 10px;">
+                    <h3 style="color: #0ea5e9; margin-top: 0;">尼洋河与雅鲁藏布江的交汇</h3>
+                    <p style="color: #ccc; line-height: 1.5;">这里是我们自定义的 <b>HTML 气泡</b>，它比 Stories 编辑器里的要灵活一百倍。你可以在这里嵌入视频、添加超链接，甚至写入交互按钮。</p>
+                </div>
+            `
+        });
+
+        // 【关键步骤 4】设计一个极其惊艳的“电影级开场飞行”
+        // 网页一加载完，镜头不生硬地跳跃，而是像航拍机一样缓缓飞向目标点
+        viewer.camera.flyTo({
+            destination: Cesium.Cartesian3.fromDegrees(94.453298, 29.35, 8000), // 相机挂在山头南边，8000米高空
+            orientation: {
+                heading: Cesium.Math.toRadians(0),   // 正北方向看
+                pitch: Cesium.Math.toRadians(-20),   // 往下俯视 20度，看到远处的群山和河谷
+                roll: 0.0
+            },
+            duration: 6, // 飞行过程持续 6 秒，非常顺滑
+            easingFunction: Cesium.EasingFunction.QUADRATIC_IN_OUT // 电影级缓动特效：开头慢，中间快，结尾慢
+        });
+
+    </script>
+</body>
+</html>
