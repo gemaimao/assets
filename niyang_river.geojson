@@ -1,0 +1,271 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.45329854581215,
+          29.43285129690758
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.45340234729612,
+          29.43339553430271
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.45151427863522,
+          29.43352927829726
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.45065423644036,
+          29.43352422568512
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.44965408242771,
+          29.43333328437342
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.44852718702911,
+          29.43252635023685
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": "<div style=\"width:100%; max-width:560px; background-color:#fdfcf7; color:#2c2c2c; font-family:sans-serif; border-radius:12px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.2);\">\n    <div style=\"background-color:#8c2d19; color:#ffffff; padding:15px; border-bottom:4px solid #dca742;\">\n        <h2 style=\"margin:0; font-size:18px; letter-spacing:1px;\">空间叙事：则拉岗</h2>\n        <p style=\"margin:5px 0 0 0; font-size:11px; opacity:0.8;\">坐标：94.354E, 29.491N | 维度：地缘变迁</p>\n    </div>\n\n    <div style=\"padding:10px;\">\n        <img src=\"https://longhulin.us.kg/zlg_main.jpg\" style=\"width:100%; border-radius:6px; display:block;\" alt=\"空间采样\">\n    </div>\n\n    <div style=\"padding:0 15px 15px 15px;\">\n        <div style=\"background:#f4f1ea; padding:12px; border-radius:8px; border-left:4px solid #dca742; margin-bottom:15px;\">\n            <strong style=\"color:#8c2d19; display:block; margin-bottom:5px;\">核心观察：</strong>\n            <p style=\"margin:0; font-size:13px; text-align:justify;\">此处为尼洋河口与雅江交汇的“咽喉”，古往今来均是工布地区的政治与信仰中枢。</p>\n        </div>\n\n        <div style=\"font-size:13px;\">\n            <div style=\"margin-bottom:10px;\">\n                <span style=\"color:#2b7a78; font-weight:bold;\">● 藏典记载：</span>\n                则拉岗意为“象鼻山”，其山体走势不仅是地理阻隔，更是古代军事布防的天然屏障。\n            </div>\n            <div style=\"margin-bottom:10px;\">\n                <span style=\"color:#2b7a78; font-weight:bold;\">● 活化现状：</span>\n                从苯教神庙到噶玛巴驻锡地，再到则拉宗，此处完成了从“原始信仰”到“行政中心”的权力演进。\n            </div>\n        </div>\n    </div>\n\n    <div style=\"background:#8c2d19; color:#fff; font-size:10px; padding:8px; text-align:center;\">\n        © 2026 LONGHULIN | 空间语义资产库\n    </div>\n</div>"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.44858629937885,
+          29.43364718487495
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.44799848527785,
+          29.43183531920007
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.44636506476205,
+          29.43163121814848
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.44297703407085,
+          29.43057606989113
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.44233904836236,
+          29.43084464796425
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.44738741765352,
+          29.42541447017582
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.44600784315139,
+          29.43087914769654
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.43128719636574,
+          29.43820674257027
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.43456379117546,
+          29.44220939463391
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.44400604664553,
+          29.41794052017866
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.44815019783022,
+          29.4288120073947
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.44957146032007,
+          29.42496697548319
+        ]
+      },
+      "properties": {
+        "name": "",
+        "description": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          94.4471076265442,
+          29.43403704141294
+        ]
+      },
+      "properties": {
+        "name": "一处林卡和遗址区",
+        "description": ""
+      }
+    }
+  ]
+}
