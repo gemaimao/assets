@@ -31,6 +31,20 @@
         "line-color": "#0d9488",
         "line-width": 4
       }
+    },
+    {
+      "id": "niyang-points-layer",
+      "type": "circle",
+      "source": {
+        "type": "geojson",
+        "data": "./niyang_river.geojson"
+      },
+      "paint": {
+        "circle-color": "#e11d48",
+        "circle-radius": 8,
+        "circle-stroke-width": 2,
+        "circle-stroke-color": "#ffffff"
+      }
     }
   ],
   "styles": {},
