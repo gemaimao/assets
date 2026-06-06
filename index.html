@@ -7,6 +7,11 @@
     <!-- 引入 MapLibre 官方样式与核心库 -->
     <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
     <link href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" rel="stylesheet" />
+    
+    <!-- 引入地图绘制与编辑插件 (Mapbox GL Draw) -->
+    <script src="https://unpkg.com/@mapbox/mapbox-gl-draw@1.4.3/dist/mapbox-gl-draw.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@mapbox/mapbox-gl-draw@1.4.3/dist/mapbox-gl-draw.css" type="text/css" />
+
     <style>
         body { margin: 0; padding: 0; font-family: sans-serif; }
         #map { position: absolute; top: 0; bottom: 0; width: 100%; }
@@ -45,6 +50,18 @@
                 // 添加导航控件（缩放、指南针）
                 map.addControl(new maplibregl.NavigationControl(), 'top-right');
                 map.addControl(new maplibregl.FullscreenControl(), 'top-right');
+
+                // 添加地理信息绘制/编辑套件
+                const draw = new MapboxDraw({
+                    displayControlsDefault: false,
+                    controls: {
+                        polygon: true,
+                        line_string: true,
+                        point: true,
+                        trash: true
+                    }
+                });
+                map.addControl(draw, 'top-left');
 
                 // 3. 地图加载完成后，注入我们配置的图层
                 map.on('load', () => {
